@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\PharmaceuticalController;
 use App\Http\Controllers\UserController;
+use App\Models\Pharmaceutical;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -25,5 +26,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('users', [UserController::class, 'store']);
 Route::post('login', [UserController::class, 'login']);
 Route::delete('logout',[UserController::class, 'logout']);
-
+Route::get('user', [UserController::class, 'getUser']);
+Route::middleware('checkToken')->group(function () {
 Route::post('pharma',[PharmaceuticalController::class,'store']);
+Route::get('serch',[PharmaceuticalController::class,'serch']);
+Route::get('serchComp',[PharmaceuticalController::class,'serchCompany']);
+Route::get('getClass/{calssification}',[PharmaceuticalController::class,'getByCalss']);
+});

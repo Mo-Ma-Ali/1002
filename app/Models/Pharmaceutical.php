@@ -12,11 +12,12 @@ class Pharmaceutical extends Model
 
     protected $fillable = [
         'scientific_name',
-        'commercial_nmae',
+        'commercial_name',
         'calssification',
         'manufacture_company',
         'quantity_available',
         'expire_date',
         'price',
-    ];
+    ];  
+   
 }

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('pharmaceuticals', function (Blueprint $table) {
             $table->id();
             $table->string('scientific_name');
-            $table->string('commercial_nmae');
+            $table->string('commercial_name');
             $table->string('calssification');
             $table->string('manufacture_company');
             $table->integer('quantity_available');
@@ -31,4 +31,6 @@ return new class extends Migration
     {
         Schema::dropIfExists('pharmaceuticals');
     }
+
+    
 };
