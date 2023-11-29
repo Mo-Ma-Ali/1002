@@ -32,4 +32,5 @@ Route::post('pharma',[PharmaceuticalController::class,'store']);
 Route::get('serch',[PharmaceuticalController::class,'serch']);
 Route::get('serchComp',[PharmaceuticalController::class,'serchCompany']);
 Route::get('getClass/{calssification}',[PharmaceuticalController::class,'getByCalss']);
+Route::get('getAll',[PharmaceuticalController::class,'getAllClass']);
 });

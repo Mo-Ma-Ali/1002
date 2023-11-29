@@ -55,4 +55,11 @@ class PharmaceuticalController extends Controller
      }
      return response()->json($results);
     }
+
+    public function getAllClass()
+    {
+        $Classifications = Pharmaceutical::distinct()->pluck('calssification')->toArray();
+
+         return response()->json($Classifications);
+    }
 }
