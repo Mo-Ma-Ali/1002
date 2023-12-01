@@ -45,4 +45,7 @@ Route::get('getClass/{calssification}',[PharmaceuticalController::class,'getByCa
 
 //return all the calssifications in the column in the database
 Route::get('getAll',[PharmaceuticalController::class,'getAllClass']);
+
+//return all the medicine that has the same classification
+Route::get('getAllMedicine',[PharmaceuticalController::class,'getTheClass']);
 });

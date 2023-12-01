@@ -55,7 +55,14 @@ class PharmaceuticalController extends Controller
      }
      return response()->json($results);
     }
+    public function getTheClass(Request $request)
+    {
+         $classification = $request->input('calssification');
 
+         $medicines = Pharmaceutical::where('calssification', $classification)->get();
+
+         return response()->json($medicines);
+    }
     public function getAllClass()
     {
         $Classifications = Pharmaceutical::distinct()->pluck('calssification')->toArray();
