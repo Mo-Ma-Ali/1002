@@ -21,7 +21,10 @@ class PharmaceuticalController extends Controller
 
         $model = Pharmaceutical::create($request->all());
 
-        return response()->json($model, 201);
+        return response()->json([
+            'message' => 'User logged in successfully',
+            'midcine'=>$model,
+            'code'=> 201]);
     }
 
     public function serch(Request $request)
@@ -60,6 +63,8 @@ class PharmaceuticalController extends Controller
     {
         $Classifications = Pharmaceutical::distinct()->pluck('calssification')->toArray();
 
-         return response()->json($Classifications);
+         return response()->json([
+            
+            'classifications'=> $Classifications]);
     }
 }
