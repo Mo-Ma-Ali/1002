@@ -21,7 +21,7 @@ class PharmaceuticalController extends Controller
 
         $model = Pharmaceutical::create($request->all());
 
-        return response()->json($model, 201);
+        return response()->json(['the midcine:'=> $model], 201);
     }
 
     public function serch(Request $request)
@@ -31,7 +31,7 @@ class PharmaceuticalController extends Controller
 
         $results = Pharmaceutical::where('calssification', 'LIKE', "%{$query}%")->get();
 
-        return response()->json($results);
+        return response()->json(['the results of the calssification:'=> $results]);
     }
 
     public function serchCompany(Request $request)
@@ -41,7 +41,7 @@ class PharmaceuticalController extends Controller
 
         $results = Pharmaceutical::where('commercial_name', 'LIKE', "%{$query}%")->get();
 
-        return response()->json($results);
+        return response()->json(['the results of the commercial name:'=> $results]);
     }
 
     public function getByCalss($calssification) 
@@ -60,6 +60,7 @@ class PharmaceuticalController extends Controller
     {
         $Classifications = Pharmaceutical::distinct()->pluck('calssification')->toArray();
 
-         return response()->json($Classifications);
+         return response()->json([
+            'Classifications'=>$Classifications]);
     }
 }

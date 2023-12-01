@@ -61,7 +61,7 @@ class UserController extends Controller
         // If user doesn't exist, password is incorrect, or isPharmacy doesn't match
         if (!$user || !Hash::check($password, $user->password) || $user->ispharmacy != $isPharmacy||$user->iswarehouse != $isWarehouse) {
             return response()->json([
-                'Error' => 'Phone number does not exist, the Password is incorrect'], 401);
+                'error' => 'Phone number does not exist, the Password is incorrect'], 401);
         }
     
         // If phone and password are correct, and isPharmacy matches
@@ -105,7 +105,7 @@ public function getUser(Request $request)
     // If the user doesn't exist
     if (!$user) {
         return response()->json([
-            'Error' => 'Invalid token'
+            'error' => 'Invalid token'
         ], 401);
     }
 
