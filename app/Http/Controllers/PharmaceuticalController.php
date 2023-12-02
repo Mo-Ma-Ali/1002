@@ -21,50 +21,64 @@ class PharmaceuticalController extends Controller
 
         $model = Pharmaceutical::create($request->all());
 
+
         return response()->json([
-            'message' => 'User logged in successfully',
-            'midcine'=>$model,
-            'code'=> 201]);
+            'message' => 'item added successfully',
+            'midcine' => $model,
+            'code' => 201
+        ]);
     }
 
     public function serch(Request $request)
     {
-        
+
         $query = $request->input('calssification');
 
         $results = Pharmaceutical::where('calssification', 'LIKE', "%{$query}%")->get();
 
-        return response()->json($results);
+        return response()->json(['the results of the calssification:' => $results]);
     }
 
     public function serchCompany(Request $request)
     {
-        
+
         $query = $request->input('commercial_name');
 
         $results = Pharmaceutical::where('commercial_name', 'LIKE', "%{$query}%")->get();
 
-        return response()->json($results);
+        return response()->json(['the results of the commercial name:' => $results]);
     }
 
-    public function getByCalss($calssification) 
+    // public function getByCalss($calssification)
+    // {
+    //     $serch = Pharmaceutical::where('calssification', $calssification)->get();
+    //     //dd($serch);
+    //     $results = [];
+    //     foreach ($serch as $data) {
+    //         $results = $data;
+    //     }
+    //     return response()->json($results);
+    // }
+    public function getTheClass(Request $request)
     {
-     $serch = Pharmaceutical::where('calssification',$calssification)->get();
-     //dd($serch);
-     $results=[];
-     foreach($serch as $data)
-     {
-        $results=$data;
-     }
-     return response()->json($results);
-    }
+        $classification = $request->input('calssification');
 
+        $medicines = Pharmaceutical::where('calssification', $classification)->get();
+
+        return response()->json(
+            [
+
+                'medicines' => $medicines
+            ]
+        );
+    }
     public function getAllClass()
     {
         $Classifications = Pharmaceutical::distinct()->pluck('calssification')->toArray();
 
-         return response()->json([
-            
-            'classifications'=> $Classifications]);
+        return response()->json([
+
+            'classifications' => $Classifications
+        ]);
     }
 }

@@ -25,8 +25,10 @@ class EnsureTokenIsValid
 
         // Check if the token exists in the database
         $user = User::where('api_token', $token)->first();
+        //$warehouse=User::where ('iswarehouse')->first();
        // dd($user);
-        if (!$user) {
+        if (!$user//||!$warehouse
+        ) {
             return response()->json(['error' => 'Invalid token'], 401);
         }
 

@@ -23,14 +23,29 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('users', [UserController::class, 'store']);
+Route::post('signin', [UserController::class, 'store']);
 Route::post('login', [UserController::class, 'login']);
 Route::delete('logout',[UserController::class, 'logout']);
+
+//get the info of the user by the token 
 Route::get('user', [UserController::class, 'getUser']);
+
+//to check if the user has a token valuoe
 Route::middleware('checkToken')->group(function () {
-Route::post('pharma',[PharmaceuticalController::class,'store']);
-Route::get('serch',[PharmaceuticalController::class,'serch']);
-Route::get('serchComp',[PharmaceuticalController::class,'serchCompany']);
-Route::get('getClass/{calssification}',[PharmaceuticalController::class,'getByCalss']);
+
+//Check if the user is a warehouse and then store the pharmaceutical data in the database
+Route::middleware('checkWarehouse')->post('store',[PharmaceuticalController::class,'store']);
+
+//search the pharamceutical by the calssification
+Route::get('saerch',[PharmaceuticalController::class,'serch']);
+
+//search the pharamceutical by the company name
+Route::get('saerchComp',[PharmaceuticalController::class,'serchCompany']);
+//Route::get('getClass/{calssification}',[PharmaceuticalController::class,'getByCalss']);
+
+//return all the calssifications in the column in the database
 Route::get('getAll',[PharmaceuticalController::class,'getAllClass']);
+
+//return all the medicine that has the same classification
+Route::get('getAllMedicine',[PharmaceuticalController::class,'getTheClass']);
 });
