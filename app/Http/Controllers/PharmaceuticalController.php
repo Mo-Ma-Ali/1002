@@ -18,21 +18,74 @@ class PharmaceuticalController extends Controller
             'expire_date' => 'required|date_format:Y-m-d',
             'price' => 'required|integer',
         ]);
-
+       // $data=$request->input('calssification');
+        //$search=Pharmaceutical::where('calssification',$data)->first();
+      //  dd($data);
+        //if($search)
+       // return response()->json(['message'=>'the medicine is already exist'],200);
+   // else{
         $model = Pharmaceutical::create($request->all());
 
-        return response()->json(['the midcine:'=> $model], 201);
+        return response()->json(['the medicine:'=> $model], 201);
+    //}
     }
+
+
+
+    public function quantity(Request $request)
+    {
+        $id = $request->input('id');
+        $number=$request->input('quantity');
+        $medicine=Pharmaceutical::where('id',$id)->first();
+
+        
+        //check if the medicine is not exist 
+        if (!$medicine)
+        {
+            return response()->json(['message'=>'the medicine is not found'],404);
+        }
+
+
+        //if the user want to remove all the quantity
+        //$quantity=$medicine->quantity_available;
+        if($request->input('quantity')=="all")
+        {
+            $medicine->quantity_available=0;
+            $medicine->save();
+            return response()->json(['message'=>'the quntity removed succesfully','medicine'=>$medicine],200);
+        }
+        //if the user want to add or remove a number of the quantity
+        $medicine->quantity_available+=$number;
+
+
+        //check if the quntity_availble is a negative number
+        if($medicine->quantity_available<0)
+
+        return response()->json(['message'=>'the quntity is not alivabel'],400);
+
+
+        //save the editting
+        else{
+        $medicine->save();
+        return response()->json(['message'=>'the quntity added succesfully','medicine'=>$medicine],200);
+    }
+    }
+
+
 
     public function serch(Request $request)
     {
         
         $query = $request->input('calssification');
 
-        $results = Pharmaceutical::where('calssification', 'LIKE', "%{$query}%")->get();
-
-        return response()->json(['the results of the calssification:'=> $results]);
+        $results = Pharmaceutical::where('calssification', 'LIKE', "%{$query}%")->first();
+        if(!$results)
+        return response()->json(['message'=>'the calssification does not found'],404);
+        $calssification=$results->calssification;
+        return response()->json(['the results of the calssification:'=> $calssification],200);
     }
+
+
 
     public function serchCompany(Request $request)
     {
@@ -43,6 +96,9 @@ class PharmaceuticalController extends Controller
 
         return response()->json(['the results of the commercial name:'=> $results]);
     }
+
+
+
 
     public function getByCalss($calssification) 
     {
@@ -55,6 +111,10 @@ class PharmaceuticalController extends Controller
      }
      return response()->json($results);
     }
+
+
+
+
     public function getTheClass(Request $request)
     {
          $classification = $request->input('calssification');
@@ -63,6 +123,11 @@ class PharmaceuticalController extends Controller
 
          return response()->json($medicines);
     }
+
+
+
+
+
     public function getAllClass()
     {
         $Classifications = Pharmaceutical::distinct()->pluck('calssification')->toArray();

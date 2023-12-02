@@ -36,6 +36,8 @@ Route::middleware('checkToken')->group(function () {
 //Check if the user is a warehouse and then store the pharmaceutical data in the database
 Route::middleware('checkWarehouse')->post('store',[PharmaceuticalController::class,'store']);
 
+Route::middleware('checkWarehouse')->post('edit',[PharmaceuticalController::class,'quantity']);
+
 //search the pharamceutical by the calssification
 Route::get('saerch',[PharmaceuticalController::class,'serch']);
 
