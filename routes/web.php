@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use Stichoza\GoogleTranslate\GoogleTranslate;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -14,5 +14,6 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    $tr = new GoogleTranslate('en');
+    return $tr->setSource("ar")->setTarget("it")->translate("قدام مريتها عادي بتدلع برحتها استناها واستعجلها تضحكي و ابصلها تختار ألوانها وتسألني عن رأيي بفستنها طب أختار أزاي وجمالها يحلي الدنيا بحالها");
 });

@@ -5,6 +5,7 @@ use App\Http\Controllers\UserController;
 use App\Models\Pharmaceutical;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\OrderController;
 
 
 
@@ -27,7 +28,7 @@ Route::post('signin', [UserController::class, 'store']);
 Route::post('login', [UserController::class, 'login']);
 Route::delete('logout',[UserController::class, 'logout']);
 
-//get the info of the user by the token 
+//get the info of the user by the token
 Route::get('user', [UserController::class, 'getUser']);
 
 //to check if the user has a token valuoe
@@ -50,4 +51,12 @@ Route::get('getAll',[PharmaceuticalController::class,'getAllClass']);
 
 //return all the medicine that has the same classification
 Route::get('getAllMedicine',[PharmaceuticalController::class,'getTheClass']);
+
+
+Route::post('/orders', [OrderController::class, 'createOrder']);
+
+
+Route::get('/orders', [OrderController::class, 'retrieveOrders']);
+
+Route::post('/order', [OrderController::class, 'store']);
 });

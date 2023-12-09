@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Pharmaceutical extends Model
 {
@@ -18,6 +19,9 @@ class Pharmaceutical extends Model
         'quantity_available',
         'expire_date',
         'price',
-    ];  
-   
+    ];
+    public function orders() : BelongsToMany
+    {
+        return $this->belongsToMany(Order::class);
+    }
 }
