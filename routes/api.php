@@ -39,10 +39,10 @@ Route::middleware('checkWarehouse')->post('store',[PharmaceuticalController::cla
 Route::middleware('checkWarehouse')->post('edit',[PharmaceuticalController::class,'quantity']);
 
 //search the pharamceutical by the calssification
-Route::get('saerch',[PharmaceuticalController::class,'serch']);
+Route::post('saerch',[PharmaceuticalController::class,'serch']);
 
 //search the pharamceutical by the company name
-Route::get('saerchComp',[PharmaceuticalController::class,'serchCompany']);
+Route::post('saerchComp',[PharmaceuticalController::class,'serchCompany']);
 //Route::get('getClass/{calssification}',[PharmaceuticalController::class,'getByCalss']);
 
 //return all the calssifications in the column in the database
