@@ -41,8 +41,8 @@ class PharmaceuticalController extends Controller
         $number=$request->input('quantity');
         $medicine=Pharmaceutical::where('id',$id)->first();
 
-        
-        //check if the medicine is not exist 
+
+        //check if the medicine is not exist
         if (!$medicine)
         {
             return response()->json(['message'=>'the medicine is not found'],404);
@@ -80,7 +80,7 @@ class PharmaceuticalController extends Controller
     public function serch(Request $request)
     {
         $query = $request->input('calssification');
-    
+
         $results = Pharmaceutical::where('calssification', 'LIKE', "%{$query}%")->get();
         if($results->isEmpty())
             return response()->json(['message'=>'the calssification does not found'],404);
@@ -90,18 +90,18 @@ class PharmaceuticalController extends Controller
     public function serchCompany(Request $request)
     {
         $query = $request->input('commercial_name');
-    
+
         $results = Pharmaceutical::where('commercial_name', 'LIKE', "%{$query}%")->get();
         if($results->isEmpty())
             return response()->json(['message'=>'the commercial name does not found'],404);
-        
+
         return response()->json(['the results of the commercial name:' => $results],200);
     }
 
 
 
 
-    // public function getByCalss($calssification) 
+    // public function getByCalss($calssification)
     // {
     //  $serch = Pharmaceutical::where('calssification',$calssification)->get();
     //  //dd($serch);
