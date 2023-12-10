@@ -13,8 +13,9 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('pharmaceutical_id');
-            $table->unsignedBigInteger('quantity');
+            // $table->unsignedBigInteger('pharmaceutical_id');
+            // $table->unsignedBigInteger('quantity');
+            $table->foreignId('user_id')->constrained();
             $table->timestamps();
         });
     }

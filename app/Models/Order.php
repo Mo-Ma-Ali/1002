@@ -11,9 +11,19 @@ class Order extends Model
     use HasFactory;
     protected $fillable = [
          'pharmaceutical_id',
-         'quantity'
+         'quantity',
+         'user_id'
      ];
 
+     public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function pharmaceuticals()
+    {
+        return $this->belongsToMany(Pharmaceutical::class)->withPivot('quantity');
+    }
     // public function pharmaceuticals(): BelongsToMany
     // {
     //     return $this->belongsToMany(Pharmaceutical::class);

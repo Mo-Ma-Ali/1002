@@ -20,8 +20,8 @@ class Pharmaceutical extends Model
         'expire_date',
         'price',
     ];
-    public function orders() : BelongsToMany
+    public function orders()
     {
-        return $this->belongsToMany(Order::class);
+        return $this->belongsToMany(Order::class)->withPivot('quantity');
     }
 }

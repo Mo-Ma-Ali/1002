@@ -15,7 +15,7 @@ return new class extends Migration
         $table->id();
         $table->foreignId('order_id')->constrained();
         $table->foreignId('pharmaceutical_id')->constrained();
-        $table->foreignId('number')->constrained();
+        $table->unsignedBigInteger('quantity');
         $table->timestamps();
     });
 }
