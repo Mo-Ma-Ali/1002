@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\Pharmaceutical;
+use App\Models\User;
 use PHPUnit\TextUI\Configuration\Merger;
 
 class OrderController extends Controller
@@ -35,18 +36,31 @@ class OrderController extends Controller
 
     public function store(Request $request)
 {
-    $orders = $request->input('order');
+    $token = $request->header('Authorization');
+    $user = User::where('api_token', $token)->first();
+    $user_id=$user->id;
+   // dd($user_id);
+    // Order::create([]);
+    // $orders = $request->input('order');
 
     // Validate the request data if needed
 
-    foreach ($orders as $orderData) {
-        Order::create([
-            'pharmaceutical_id' => $orderData['pharmaceutical_id'],
-            'quantity' => $orderData['quantity'],
+
+    // foreach ($orders as $orderData) {
+        $order= Order::create([
+            // 'pharmaceutical_id' => $orderData['pharmaceutical_id'],
+            // 'quantity' => $orderData['quantity'],
+            'user_id'=>$user_id
+        ]);
+    // }
+        // dd($order);
+    foreach ($request->input('order') as $pharmaceutical) {
+        $order->pharmaceuticals()->attach($pharmaceutical['pharmaceutical_id'], [
+            'quantity' => $pharmaceutical['quantity'],
         ]);
     }
 
-    return response()->json(['message' => 'Orders created successfully','order'=>$orders]);
+    return response()->json(['message' => 'Orders created successfully','order'=>$order]);
 }
 
     public function retrieveOrders()
