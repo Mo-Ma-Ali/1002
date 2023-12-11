@@ -30,7 +30,7 @@ class OrderController extends Controller
         //     );
         // }
 
-        return response()->json(['message' => 'Order created successfully', 'order' => $order], 201);
+       // return response()->json(['message' => 'Order created successfully', 'order' => $order], 201);
     }
 
     public function store(Request $request)
@@ -46,7 +46,7 @@ class OrderController extends Controller
         ]);
     }
 
-    return response()->json(['message' => 'Orders created successfully','message'=>$orders]);
+    return response()->json(['message' => 'Orders created successfully','order'=>$orders]);
 }
 
     public function retrieveOrders()

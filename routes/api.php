@@ -53,9 +53,6 @@ Route::get('getAll',[PharmaceuticalController::class,'getAllClass']);
 Route::get('getAllMedicine',[PharmaceuticalController::class,'getTheClass']);
 
 
-Route::post('/orders', [OrderController::class, 'createOrder']);
-
-
 Route::get('/orders', [OrderController::class, 'retrieveOrders']);
 
 Route::post('/order', [OrderController::class, 'store']);
