@@ -128,3 +128,45 @@ public function getOrder(Request $request)
         return response()->json(['orders' => $orders]);
     }
 }
+/*{
+  "order": {
+    "Date": "2023-12-13T12:14:29.000000Z"
+  },
+  "pharmaceuticals": [
+    {
+      "id": 1,
+      "scientific_name": "rrer",
+      "commercial_name": "lll",
+      "calssification": "maajed",
+      "manufacture_company": "maajed",
+      "quantity_available": 1010,
+      "expire_date": "2032-01-11",
+      "price": 1010,
+      "created_at": "2023-12-10T10:02:48.000000Z",
+      "updated_at": "2023-12-10T10:02:48.000000Z",
+      "pivot": {
+        "order_id": 5,
+        "pharmaceutical_id": 1,
+        "quantity": 122
+      }
+    },
+    {
+      "id": 2,
+      "scientific_name": "rrer",
+      "commercial_name": "ll",
+      "calssification": "maajed",
+      "manufacture_company": "maaed",
+      "quantity_available": 1010,
+      "expire_date": "2032-01-11",
+      "price": 1010,
+      "created_at": "2023-12-10T10:03:13.000000Z",
+      "updated_at": "2023-12-10T10:03:13.000000Z",
+      "pivot": {
+        "order_id": 5,
+        "pharmaceutical_id": 2,
+        "quantity": 3
+      }
+    }
+  ]
+}
+*/
