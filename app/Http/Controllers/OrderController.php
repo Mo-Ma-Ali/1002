@@ -85,12 +85,18 @@ class OrderController extends Controller
 public function getDate(Request $request)
 {
     $user_id = $request->input('id');
-    $order=Order::where('user_id', $user_id)->get();
-    // Retrieve orders for the specified user and select only the 'created_at' column
-    $orderDates = Order::find($order)->pluck('created_at');
 
-    return response()->json(['order_dates' => $orderDates], 200);
+    // Retrieve orders for the specified user and select only the 'created_at' column
+    $orderDates = Order::where('user_id', $user_id)->pluck('created_at');
+
+    // Transform the collection to an associative array
+    $formattedDates = $orderDates->map(function ($date) {
+        return ['date' => $date];
+    });
+
+    return response()->json(['order_dates' => $formattedDates], 200);
 }
+
 
 
 public function getOrder(Request $request)
