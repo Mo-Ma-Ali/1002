@@ -24,7 +24,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('signin', [UserController::class, 'store']);
+Route::post('signup', [UserController::class, 'store']);
 Route::post('login', [UserController::class, 'login']);
 Route::delete('logout',[UserController::class, 'logout']);
 
@@ -51,9 +51,6 @@ Route::get('getAll',[PharmaceuticalController::class,'getAllClass']);
 
 //return all the medicine that has the same classification
 Route::get('getAllMedicine',[PharmaceuticalController::class,'getTheClass']);
-
-
-Route::post('/orders', [OrderController::class, 'createOrder']);
 
 
 Route::get('/orders', [OrderController::class, 'retrieveOrders']);
