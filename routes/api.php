@@ -59,5 +59,7 @@ Route::get('/getClients',[OrderController::class,'getClients']);
 
 Route::post('/getDate',[OrderController::class,'getDate']);
 
+Route::post('getOrder',[OrderController::class,'getOrder']);
+
 Route::post('/order', [OrderController::class, 'store']);
 });

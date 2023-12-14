@@ -7,6 +7,7 @@ use App\Models\Order;
 use App\Models\Pharmaceutical;
 use App\Models\User;
 use PHPUnit\TextUI\Configuration\Merger;
+use Symfony\Component\Console\Input\Input;
 
 class OrderController extends Controller
 {
@@ -90,7 +91,26 @@ public function getDate(Request $request)
 
     return response()->json(['order_dates' => $orderDates], 200);
 }
-    public function retrieveOrders()
+
+
+public function getOrder(Request $request)
+{
+    $date = $request->input('date');
+    $user_id = $request->input('user_id');
+
+    // Retrieve orders for the specified user and date
+    $order = Order::where('user_id', $user_id)->whereDate('created_at', $date)->first();
+   // dd($order);
+    if (!$order) {
+        return response()->json(['message' => 'No order found for the specified date and user.'], 404);
+    }
+
+    // Retrieve pharmaceuticals associated with the order
+    $pharmaceuticals = $order->pharmaceuticals;
+
+    return response()->json(['order' => $order, 'pharmaceuticals' => $pharmaceuticals], 200);
+}
+ public function retrieveOrders()
     {
         // Retrieve all orders with associated pharmaceuticals and their quantities
         $orders = Order::with('pharmaceuticals')->get();
