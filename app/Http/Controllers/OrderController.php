@@ -102,20 +102,25 @@ public function getDate(Request $request)
 public function getOrder(Request $request)
 {
     $date = $request->input('date');
-    $user_id = $request->input('user_id');
+    // $user_id = $request->input('user_id');
 
     // Retrieve orders for the specified user and date
-    $order = Order::where('user_id', $user_id)->whereDate('created_at', $date)->first();
-   // dd($order);
+    $order = Order::where('created_at', $date)->first();
+
     if (!$order) {
         return response()->json(['message' => 'No order found for the specified date and user.'], 404);
     }
 
+    // Format date with time
+    $formattedDateTime = $order->created_at->format('Y-m-d\TH:i:s.u\Z');
+
     // Retrieve pharmaceuticals associated with the order
     $pharmaceuticals = $order->pharmaceuticals;
 
-    return response()->json(['order' => $order, 'pharmaceuticals' => $pharmaceuticals], 200);
+    return response()->json(['order' => ['Date' => $formattedDateTime], 'pharmaceuticals' => $pharmaceuticals], 200);
 }
+
+
  public function retrieveOrders()
     {
         // Retrieve all orders with associated pharmaceuticals and their quantities
