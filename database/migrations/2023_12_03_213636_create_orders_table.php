@@ -16,6 +16,7 @@ return new class extends Migration
             // $table->unsignedBigInteger('pharmaceutical_id');
             // $table->unsignedBigInteger('quantity');
             $table->foreignId('user_id')->constrained();
+            $table->string('status')->default("In process");
             $table->timestamps();
         });
     }

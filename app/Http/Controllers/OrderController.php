@@ -39,35 +39,60 @@ class OrderController extends Controller
     $token = $request->header('Authorization');
     $user = User::where('api_token', $token)->first();
     $user_id=$user->id;
-   // dd($user_id);
-    // Order::create([]);
-    // $orders = $request->input('order');
 
     // Validate the request data if needed
 
-
-    // foreach ($orders as $orderData) {
         $order= Order::create([
-            // 'pharmaceutical_id' => $orderData['pharmaceutical_id'],
-            // 'quantity' => $orderData['quantity'],
             'user_id'=>$user_id
         ]);
-    // }
-        // dd($order);
     foreach ($request->input('order') as $pharmaceutical) {
         $order->pharmaceuticals()->attach($pharmaceutical['pharmaceutical_id'], [
             'quantity' => $pharmaceutical['quantity'],
         ]);
     }
-
-    return response()->json(['message' => 'Orders created successfully','message'=>$order]);
+    $order->load('pharmaceuticals');
+    return response()->json(['message' => 'Orders created successfully','order'=>$order]);
 }
+    public function stauts()
+    {
 
+    }
+
+
+   public function getClients(Request $request)
+{
+    $userDetails = [];
+
+    // Retrieve unique user IDs associated with orders
+    $userIds = Order::distinct()->pluck('user_id')->toArray();
+
+    // Get user details for each unique user ID
+    foreach ($userIds as $userId) {
+        $user = User::find($userId);
+
+        if ($user) {
+            $userDetails[] = [
+                'name' => $user->name,
+                'id' => $user->id,
+            ];
+        }
+    }
+
+    return response()->json(['users' => $userDetails], 200);
+}
+public function getDate(Request $request)
+{
+    $user_id = $request->input('id');
+    $order=Order::where('user_id', $user_id)->get();
+    // Retrieve orders for the specified user and select only the 'created_at' column
+    $orderDates = Order::find($order)->pluck('created_at');
+
+    return response()->json(['order_dates' => $orderDates], 200);
+}
     public function retrieveOrders()
     {
         // Retrieve all orders with associated pharmaceuticals and their quantities
-        $orders = Order::get();
-
+        $orders = Order::with('pharmaceuticals')->get();
         return response()->json(['orders' => $orders]);
     }
 }
