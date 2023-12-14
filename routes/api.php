@@ -37,6 +37,7 @@ Route::middleware('checkToken')->group(function () {
 //Check if the user is a warehouse and then store the pharmaceutical data in the database
 Route::middleware('checkWarehouse')->post('store',[PharmaceuticalController::class,'store']);
 
+
 Route::middleware('checkWarehouse')->post('edit',[PharmaceuticalController::class,'quantity']);
 
 //search the pharamceutical by the calssification
@@ -52,14 +53,18 @@ Route::get('getAll',[PharmaceuticalController::class,'getAllClass']);
 //return all the medicine that has the same classification
 Route::get('getAllMedicine',[PharmaceuticalController::class,'getTheClass']);
 
+//review all the orders
+Route::middleware('checkWarehouse')->get('/orders', [OrderController::class, 'retrieveOrders']);
 
-Route::get('/orders', [OrderController::class, 'retrieveOrders']);
+//erturn the users that sended the orders
+Route::middleware('checkWarehouse')->get('/getClients',[OrderController::class,'getClients']);
 
-Route::get('/getClients',[OrderController::class,'getClients']);
-
+//return all the user dates of order by th id
 Route::post('/getDate',[OrderController::class,'getDate']);
 
+//return the order by user id and thew date created at
 Route::post('getOrder',[OrderController::class,'getOrder']);
 
+//to send an order
 Route::post('/order', [OrderController::class, 'store']);
 });
