@@ -13,6 +13,7 @@ class Order extends Model
          'pharmaceutical_id',
          'quantity',
          'status',
+         'payment',
          'user_id'
      ];
 

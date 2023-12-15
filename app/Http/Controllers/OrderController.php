@@ -68,7 +68,7 @@ public function status(Request $request)
 {
     $orderId = $request->input('id');
     $newStatus = $request->input('status');
-
+    //dd($newStatus);
     $order = Order::findOrFail($orderId);
 
     if ($order->status == "in process" && $newStatus == "in preparation") {
@@ -90,9 +90,10 @@ public function status(Request $request)
 
         return response()->json(['message' => 'Order status updated to "In preparation" and quantity decreased.']);
     }
-    elseif ($order->status == "In preparation" && $newStatus == "send") {
+    elseif ($order->status == "in preparation" && $newStatus == "send") {
         // Update the status of the order to "send"
-        $order->update(['status' => $newStatus]);
+        $payment="paid";
+        $order->update(['status' => $newStatus,'payment'=>$payment]);
 
         return response()->json(['message' => 'Order status updated to "send".']);
     }
@@ -186,7 +187,7 @@ public function getOrder(Request $request)
     // Retrieve pharmaceuticals associated with the order
     $pharmaceuticals = $order->pharmaceuticals;
 
-    return response()->json(['status' => $order->status,'order'=>['Date' => $formattedDateTime], 'pharmaceuticals' => $pharmaceuticals], 200);
+    return response()->json(['status' => $order->status,'payment'=>$order->payment,'order'=>['Date' => $formattedDateTime], 'pharmaceuticals' => $pharmaceuticals], 200);
 }
 
 
