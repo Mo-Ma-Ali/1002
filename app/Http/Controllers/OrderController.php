@@ -35,13 +35,17 @@ class OrderController extends Controller
        // return response()->json(['message' => 'Order created successfully', 'order' => $order], 201);
     }
 
+
+
+
+
+
     public function store(Request $request)
 {
     $token = $request->header('Authorization');
     $user = User::where('api_token', $token)->first();
     $user_id=$user->id;
 
-    // Validate the request data if needed
 
         $order= Order::create([
             'user_id'=>$user_id
@@ -55,10 +59,50 @@ class OrderController extends Controller
 
     return response()->json(['message' => 'Orders created successfully','order'=>$order]);
 }
-    public function stauts()
-    {
 
+
+
+
+
+public function status(Request $request)
+{
+    $orderId = $request->input('id');
+    $newStatus = $request->input('status');
+
+    $order = Order::findOrFail($orderId);
+
+    if ($order->status == "in process" && $newStatus == "in preparation") {
+        // Get pharmaceuticals associated with the order
+        $pharmaceuticals = $order->pharmaceuticals()->withPivot('quantity')->get();
+
+        // Update the status of the order
+        $order->update(['status' => $newStatus]);
+
+        // Update the quantity in the Pharmaceutical table
+        foreach ($pharmaceuticals as $pharmaceutical) {
+            $pharmaceuticalId = $pharmaceutical->id;
+            $pivotQuantity = $pharmaceutical->pivot->quantity;
+
+            // Update the quantity_available in the Pharmaceutical table
+            Pharmaceutical::where('id', $pharmaceuticalId)
+                ->decrement('quantity_available', $pivotQuantity);
+        }
+
+        return response()->json(['message' => 'Order status updated to "In preparation" and quantity decreased.']);
     }
+    elseif ($order->status == "In preparation" && $newStatus == "send") {
+        // Update the status of the order to "send"
+        $order->update(['status' => $newStatus]);
+
+        return response()->json(['message' => 'Order status updated to "send".']);
+    }
+    return response()->json(['message' => 'Invalid operation.']);
+}
+
+
+
+
+
 
 
    public function getClients(Request $request)
@@ -82,6 +126,10 @@ class OrderController extends Controller
 
     return response()->json(['users' => $userDetails], 200);
 }
+
+
+
+
 public function getDate(Request $request)
 {
     $user_id = $request->input('id');
@@ -96,6 +144,27 @@ public function getDate(Request $request)
 
     return response()->json(['order_dates' => $formattedDates], 200);
 }
+
+
+
+
+public function getToken(Request $request)
+{
+    $token = $request->header('Authorization');
+    $user = User::where('api_token', $token)->first();
+    $user_id=$user->id;
+
+    // Retrieve orders for the specified user and select only the 'created_at' column
+    $orderDates = Order::where('user_id', $user_id)->pluck('created_at');
+
+    // Transform the collection to an associative array
+    $formattedDates = $orderDates->map(function ($date) {
+        return ['date' => $date];
+    });
+
+    return response()->json(['order_dates' => $formattedDates], 200);
+}
+
 
 
 
@@ -117,8 +186,9 @@ public function getOrder(Request $request)
     // Retrieve pharmaceuticals associated with the order
     $pharmaceuticals = $order->pharmaceuticals;
 
-    return response()->json(['order' => ['Date' => $formattedDateTime], 'pharmaceuticals' => $pharmaceuticals], 200);
+    return response()->json(['status' => $order->status,'order'=>['Date' => $formattedDateTime], 'pharmaceuticals' => $pharmaceuticals], 200);
 }
+
 
 
  public function retrieveOrders()

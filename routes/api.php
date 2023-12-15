@@ -60,11 +60,17 @@ Route::middleware('checkWarehouse')->get('/orders', [OrderController::class, 're
 Route::middleware('checkWarehouse')->get('/getClients',[OrderController::class,'getClients']);
 
 //return all the user dates of order by th id
-Route::post('/getDate',[OrderController::class,'getDate']);
+Route::middleware('checkWarehouse')->post('/getDate',[OrderController::class,'getDate']);
 
-//return the order by user id and thew date created at
+//return all the user dates without id only token with middleware to check if it is a pharmacy
+Route::middleware('checkPharmacy')->get('/getTDate',[OrderController::class,'getToken']);
+
+//return the order by user id and the date created at
 Route::post('getOrder',[OrderController::class,'getOrder']);
 
 //to send an order
-Route::post('/order', [OrderController::class, 'store']);
+Route::middleware('checkPharmacy')->post('/order', [OrderController::class, 'store']);
+
+//change the order status
+Route::middleware('checkWarehouse')->put('/status',[OrderController::class,'status']);
 });
