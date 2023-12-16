@@ -70,14 +70,20 @@ public function status(Request $request)
     $newStatus = $request->input('status');
     //dd($newStatus);
     $order = Order::findOrFail($orderId);
-
-    if ($order->status == "in process" && $newStatus == "in preparation") {
-        // Get pharmaceuticals associated with the order
-        $pharmaceuticals = $order->pharmaceuticals()->withPivot('quantity')->get();
-
-        // Update the status of the order
+    if ($order->status == "in process" && $newStatus == "cancel")
+    {
         $order->update(['status' => $newStatus]);
 
+        return response()->json(['message' => 'Order canceled.']);
+    }
+    elseif ($order->status == "in process" && $newStatus == "in preparation") {
+        // Update the status of the order
+        $order->update(['status' => $newStatus]);
+        return response()->json(['message' => 'Order status In preparation.']);
+    }
+    elseif ($order->status == "in preparation" && $newStatus == "send") {
+        // Update the status of the order to "send"
+        $pharmaceuticals = $order->pharmaceuticals()->withPivot('quantity')->get();
         // Update the quantity in the Pharmaceutical table
         foreach ($pharmaceuticals as $pharmaceutical) {
             $pharmaceuticalId = $pharmaceutical->id;
@@ -87,21 +93,34 @@ public function status(Request $request)
             Pharmaceutical::where('id', $pharmaceuticalId)
                 ->decrement('quantity_available', $pivotQuantity);
         }
+        $order->update(['status' => $newStatus]);
 
-        return response()->json(['message' => 'Order status updated to "In preparation" and quantity decreased.']);
-    }
-    elseif ($order->status == "in preparation" && $newStatus == "send") {
-        // Update the status of the order to "send"
-        $payment="paid";
-        $order->update(['status' => $newStatus,'payment'=>$payment]);
-
-        return response()->json(['message' => 'Order status updated to "send".']);
+        return response()->json(['message' => 'Order status: send.']);
     }
     return response()->json(['message' => 'Invalid operation.']);
 }
 
 
 
+public function payment(Request $request)
+{
+    $request->validate([
+        'id' => 'required|exists:orders,id',
+        'payment' => 'required|in:paid',
+    ]);
+
+    $orderId = $request->input('id');
+    $paid = $request->input('payment');
+    $order = Order::findOrFail($orderId);
+
+    if ($order->payment == "unpaid" && $paid == "paid")
+    {
+        $order->update(['payment' => $paid]);
+        return response()->json(['message' => 'Order paid successfully.']);
+    }
+
+    return response()->json(['message' => 'Invalid request.']);
+}
 
 
 

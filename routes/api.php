@@ -73,4 +73,7 @@ Route::middleware('checkPharmacy')->post('/order', [OrderController::class, 'sto
 
 //change the order status
 Route::middleware('checkWarehouse')->put('/status',[OrderController::class,'status']);
+
+//cahnge the order to paid
+Route::middleware('checkWarehouse')->put('/payment', [OrderController::class, 'payment']);
 });

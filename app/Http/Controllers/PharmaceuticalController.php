@@ -87,6 +87,10 @@ class PharmaceuticalController extends Controller
         $calssification = $results->pluck('calssification')->unique(); // Get all unique 'calssification' fields from the results
         return response()->json(['the results of the calssification:'=> $calssification->values()],200);
     }
+
+
+
+
     public function serchCompany(Request $request)
     {
         $query = $request->input('commercial_name');
