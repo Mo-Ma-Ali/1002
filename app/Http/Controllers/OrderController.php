@@ -191,7 +191,6 @@ public function getToken(Request $request)
 public function getOrder(Request $request)
 {
     $date = $request->input('date');
-    // $user_id = $request->input('user_id');
 
     // Retrieve orders for the specified user and date
     $order = Order::where('created_at', $date)->first();
@@ -206,8 +205,17 @@ public function getOrder(Request $request)
     // Retrieve pharmaceuticals associated with the order
     $pharmaceuticals = $order->pharmaceuticals;
 
-    return response()->json(['status' => $order->status,'payment'=>$order->payment,'order'=>['Date' => $formattedDateTime], 'pharmaceuticals' => $pharmaceuticals], 200);
+    return response()->json([
+        'order' => [
+            'Date' => $formattedDateTime,
+            'status' => $order->status,
+            'payment' => $order->payment,
+            'order_id'=>$order->id
+        ],
+        'pharmaceuticals' => $pharmaceuticals
+    ], 200);
 }
+
 
 
 
@@ -220,39 +228,42 @@ public function getOrder(Request $request)
 }
 /*{
   "order": {
-    "Date": "2023-12-13T12:14:29.000000Z"
+    "Date": "2023-12-15T14:03:48.000000Z",
+    "status": "send",
+    "payment": "paid",
+    "order_id": 1
   },
   "pharmaceuticals": [
     {
       "id": 1,
       "scientific_name": "rrer",
-      "commercial_name": "lll",
+      "commercial_name": "lew",
       "calssification": "maajed",
-      "manufacture_company": "maajed",
-      "quantity_available": 1010,
+      "manufacture_company": "majaed",
+      "quantity_available": 1005,
       "expire_date": "2032-01-11",
       "price": 1010,
-      "created_at": "2023-12-10T10:02:48.000000Z",
-      "updated_at": "2023-12-10T10:02:48.000000Z",
+      "created_at": "2023-12-15T14:03:09.000000Z",
+      "updated_at": "2023-12-15T14:16:05.000000Z",
       "pivot": {
-        "order_id": 5,
+        "order_id": 1,
         "pharmaceutical_id": 1,
-        "quantity": 122
+        "quantity": 5
       }
     },
     {
       "id": 2,
       "scientific_name": "rrer",
-      "commercial_name": "ll",
+      "commercial_name": "lssew",
       "calssification": "maajed",
-      "manufacture_company": "maaed",
-      "quantity_available": 1010,
+      "manufacture_company": "majaed",
+      "quantity_available": 1007,
       "expire_date": "2032-01-11",
       "price": 1010,
-      "created_at": "2023-12-10T10:03:13.000000Z",
-      "updated_at": "2023-12-10T10:03:13.000000Z",
+      "created_at": "2023-12-15T14:03:16.000000Z",
+      "updated_at": "2023-12-15T14:16:05.000000Z",
       "pivot": {
-        "order_id": 5,
+        "order_id": 1,
         "pharmaceutical_id": 2,
         "quantity": 3
       }
