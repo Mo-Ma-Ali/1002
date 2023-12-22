@@ -68,36 +68,34 @@ public function status(Request $request)
 {
     $orderId = $request->input('id');
     $newStatus = $request->input('status');
-    //dd($newStatus);
     $order = Order::findOrFail($orderId);
-    if ($order->status == "in process" && $newStatus == "cancel")
-    {
-        $order->update(['status' => $newStatus]);
 
+    if ($order->status == "in process" && $newStatus == "cancel") {
+        $order->update(['status' => $newStatus]);
         return response()->json(['message' => 'Order canceled.']);
     }
     elseif ($order->status == "in process" && $newStatus == "in preparation") {
-        // Update the status of the order
         $order->update(['status' => $newStatus]);
         return response()->json(['message' => 'Order status In preparation.']);
     }
-    elseif (($order->status == "in preparation" && $newStatus == "send")||($order->status == "in process" && $newStatus == "send"))  {
+
         // Update the status of the order to "send"
+
+
+    elseif (($order->status == "in preparation" && $newStatus == "send")||($order->status == "in process" && $newStatus == "send")) {
         $pharmaceuticals = $order->pharmaceuticals()->withPivot('quantity')->get();
-        // Update the quantity in the Pharmaceutical table
         foreach ($pharmaceuticals as $pharmaceutical) {
             $pharmaceuticalId = $pharmaceutical->id;
             $pivotQuantity = $pharmaceutical->pivot->quantity;
-
-            // Update the quantity_available in the Pharmaceutical table
             Pharmaceutical::where('id', $pharmaceuticalId)
                 ->decrement('quantity_available', $pivotQuantity);
         }
         $order->update(['status' => $newStatus]);
-
         return response()->json(['message' => 'Order status: send.']);
     }
-    return response()->json(['message' => 'Invalid operation.']);
+    else {
+        return response()->json(['message' => 'Invalid operation.']);
+    }
 }
 
 
@@ -210,7 +208,7 @@ public function getOrder(Request $request)
             'Date' => $formattedDateTime,
             'status' => $order->status,
             'payment' => $order->payment,
-            'order_id'=>$order->id
+            'order_id'=>$order->id,
         ],
         'pharmaceuticals' => $pharmaceuticals
     ], 200);
@@ -226,7 +224,7 @@ public function getOrder(Request $request)
         return response()->json(['orders' => $orders]);
     }
 }
-/*{
+/*{"order":{
   "order": {
     "Date": "2023-12-15T14:03:48.000000Z",
     "status": "send",
