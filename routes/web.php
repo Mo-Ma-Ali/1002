@@ -15,5 +15,5 @@ use Stichoza\GoogleTranslate\GoogleTranslate;
 
 Route::get('/', function () {
     $tr = new GoogleTranslate('en');
-    return $tr->setSource("ar")->setTarget("it")->translate("قدام مريتها عادي بتدلع برحتها استناها واستعجلها تضحكي و ابصلها تختار ألوانها وتسألني عن رأيي بفستنها طب أختار أزاي وجمالها يحلي الدنيا بحالها");
+    return $tr->setSource("ar")->setTarget("en")->translate("قدام مريتها عادي بتدلع برحتها استناها واستعجلها تضحكي و ابصلها تختار ألوانها وتسألني عن رأيي بفستنها طب أختار أزاي وجمالها يحلي الدنيا بحالها");
 });

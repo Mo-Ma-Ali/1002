@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\FavoritesController;
 use App\Http\Controllers\PharmaceuticalController;
 use App\Http\Controllers\UserController;
 use App\Models\Pharmaceutical;
@@ -72,8 +73,17 @@ Route::post('getOrder',[OrderController::class,'getOrder']);
 Route::middleware('checkPharmacy')->post('/order', [OrderController::class, 'store']);
 
 //change the order status
-Route::middleware('checkWarehouse')->put('/status',[OrderController::class,'status']);
+Route::middleware('checkWarehouse')->post('/status',[OrderController::class,'status']);
 
 //cahnge the order to paid
-Route::middleware('checkWarehouse')->put('/payment', [OrderController::class, 'payment']);
+Route::middleware('checkWarehouse')->post('/payment', [OrderController::class, 'payment']);
+
+//to add a pharmaceutical to a favoirte list
+Route::middleware('checkPharmacy')->post('/favorites/{pharmaceuticalId}',[FavoritesController::class,'addToFavorites']);
+
+//to get the favorites pharmaceuticales by the token
+Route::middleware('checkPharmacy')->get('/get-favorites', [FavoritesController::class, 'getFavorites']);
+
+//to remove an item from the favorites
+Route::middleware('checkPharmacy')->delete('/Defavorites/{pharmaceuticalId}', [FavoritesController::class,'removeFavorite']);
 });

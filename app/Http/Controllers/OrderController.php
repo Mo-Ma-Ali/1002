@@ -81,7 +81,7 @@ public function status(Request $request)
         $order->update(['status' => $newStatus]);
         return response()->json(['message' => 'Order status In preparation.']);
     }
-    elseif ($order->status == "in preparation" && $newStatus == "send") {
+    elseif (($order->status == "in preparation" && $newStatus == "send")||($order->status == "in process" && $newStatus == "send"))  {
         // Update the status of the order to "send"
         $pharmaceuticals = $order->pharmaceuticals()->withPivot('quantity')->get();
         // Update the quantity in the Pharmaceutical table
