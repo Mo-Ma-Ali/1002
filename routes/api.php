@@ -72,8 +72,8 @@ Route::post('getOrder',[OrderController::class,'getOrder']);
 Route::middleware('checkPharmacy')->post('/order', [OrderController::class, 'store']);
 
 //change the order status
-Route::middleware('checkWarehouse')->put('/status',[OrderController::class,'status']);
+Route::middleware('checkWarehouse')->post('/status',[OrderController::class,'status']);
 
 //cahnge the order to paid
-Route::middleware('checkWarehouse')->put('/payment', [OrderController::class, 'payment']);
+Route::middleware('checkWarehouse')->post('/payment', [OrderController::class, 'payment']);
 });
