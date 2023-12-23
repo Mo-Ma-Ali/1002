@@ -3,7 +3,6 @@
 use App\Http\Controllers\FavoritesController;
 use App\Http\Controllers\PharmaceuticalController;
 use App\Http\Controllers\UserController;
-use App\Models\Pharmaceutical;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\OrderController;
@@ -30,13 +29,13 @@ Route::post('login', [UserController::class, 'login']);
 Route::delete('logout',[UserController::class, 'logout']);
 
 //get the info of the user by the token
-Route::get('user', [UserController::class, 'getUser']);
+Route::middleware('tran')->get('user', [UserController::class, 'getUser']);
 
 //to check if the user has a token valuoe
 Route::middleware('checkToken')->group(function () {
 
 //Check if the user is a warehouse and then store the pharmaceutical data in the database
-Route::middleware('checkWarehouse')->post('store',[PharmaceuticalController::class,'store']);
+Route::middleware('checkWarehouse')->middleware('tran')->post('store',[PharmaceuticalController::class,'store']);
 
 
 Route::middleware('checkWarehouse')->post('edit',[PharmaceuticalController::class,'quantity']);
@@ -49,10 +48,10 @@ Route::post('saerchComp',[PharmaceuticalController::class,'serchCompany']);
 //Route::get('getClass/{calssification}',[PharmaceuticalController::class,'getByCalss']);
 
 //return all the calssifications in the column in the database
-Route::get('getAll',[PharmaceuticalController::class,'getAllClass']);
+Route::middleware('tran')->get('getAll',[PharmaceuticalController::class,'getAllClass']);
 
 //return all the medicine that has the same classification
-Route::get('getAllMedicine',[PharmaceuticalController::class,'getTheClass']);
+Route::middleware('tran')->post('getAllMedicine',[PharmaceuticalController::class,'getTheClass']);
 
 //review all the orders
 Route::middleware('checkWarehouse')->get('/orders', [OrderController::class, 'retrieveOrders']);
@@ -85,5 +84,5 @@ Route::middleware('checkPharmacy')->post('/favorites/{pharmaceuticalId}',[Favori
 Route::middleware('checkPharmacy')->get('/get-favorites', [FavoritesController::class, 'getFavorites']);
 
 //to remove an item from the favorites
-Route::middleware('checkPharmacy')->delete('/Defavorites/{pharmaceuticalId}', [FavoritesController::class,'removeFavorite']);
+//Route::middleware('checkPharmacy')->delete('/Defavorites/{pharmaceuticalId}', [FavoritesController::class,'removeFavorite']);
 });

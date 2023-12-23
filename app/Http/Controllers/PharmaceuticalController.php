@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Pharmaceutical;
+use App\Models\User;
 
 class PharmaceuticalController extends Controller
 {
@@ -119,19 +120,30 @@ class PharmaceuticalController extends Controller
 
 
 
+
     public function getTheClass(Request $request)
     {
         $classification = $request->input('calssification');
+        $token = $request->header('Authorization');
+        $user = User::where('api_token', $token)->first();
 
+        // Retrieve medicines for the specified classification
         $medicines = Pharmaceutical::where('calssification', $classification)->get();
 
-        return response()->json(
-            [
+        // Retrieve the favorite pharmaceuticals for the user
+        $userFavorites = $user->favorites->pluck('id')->toArray();
 
-                'medicines' => $medicines
-            ]
-        );
+        // Map each medicine to include a flag indicating whether it's a favorite
+        $medicinesWithFavorites = $medicines->map(function ($medicine) use ($userFavorites) {
+            $medicineArray = $medicine->toArray();
+            $medicineArray['is_favorite'] = in_array($medicine->id, $userFavorites);
+            return $medicineArray;
+        });
+
+        return response()->json(['medicines' => $medicinesWithFavorites], 200);
     }
+
+
 
 
 
@@ -139,6 +151,7 @@ class PharmaceuticalController extends Controller
 
     public function getAllClass()
     {
+
         $Classifications = Pharmaceutical::distinct()->pluck('calssification')->toArray();
 
         return response()->json([

@@ -67,5 +67,6 @@ class Kernel extends HttpKernel
         'checkToken' => \App\Http\Middleware\EnsureTokenIsValid::class,
         'checkWarehouse' => \App\Http\Middleware\checkIfWarehouse::class,
         'checkPharmacy' => \App\Http\Middleware\CheckPharmacy::class,
+        'tran'=>\App\Http\Middleware\TranslateMiddleware::class,
     ];
 }

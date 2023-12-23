@@ -18,7 +18,8 @@ class FavoritesController extends Controller
 
     // Check if the pharmaceutical is already in the user's favorites
     if ($user->favorites()->where('pharmaceutical_id', $pharmaceuticalId)->exists()) {
-        return response()->json(['message' => 'Pharmaceutical already in favorites']);
+        $user->favorites()->detach($pharmaceuticalId);
+        return response()->json(['message' => 'Pharmaceutical removed from favorites successfully']);
     }
 
     // Attach the pharmaceutical to the user's favorites
@@ -45,18 +46,18 @@ class FavoritesController extends Controller
 
 
 
-public function removeFavorite(Request $request,$pharmaceuticalId)
-    {
-        $token = $request->header('Authorization');
-        $user = User::where('api_token', $token)->first();
-        //Check if the item exist
-        if ($user->favorites()->where('pharmaceutical_id', $pharmaceuticalId)->exists()) {
-             // Detach the pharmaceutical from the user's favorites
-            $user->favorites()->detach($pharmaceuticalId);
-            return response()->json(['message' => 'Pharmaceutical removed from favorites successfully']);
-        }
-       //If the item was not exist
-        return response()->json(['message' => 'Pharmaceutical does not exsit']);
+// public function removeFavorite(Request $request,$pharmaceuticalId)
+//     {
+//         $token = $request->header('Authorization');
+//         $user = User::where('api_token', $token)->first();
+//         //Check if the item exist
+//         if ($user->favorites()->where('pharmaceutical_id', $pharmaceuticalId)->exists()) {
+//              // Detach the pharmaceutical from the user's favorites
+//             $user->favorites()->detach($pharmaceuticalId);
+//             return response()->json(['message' => 'Pharmaceutical removed from favorites successfully']);
+//         }
+//        //If the item was not exist
+//         return response()->json(['message' => 'Pharmaceutical does not exsit']);
 
-    }
+//     }
 }
