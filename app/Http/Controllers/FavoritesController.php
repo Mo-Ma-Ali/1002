@@ -30,19 +30,23 @@ class FavoritesController extends Controller
 
 
 
-
-    public function getFavorites(Request $request)
+public function getFavorites(Request $request)
 {
     // Get the authenticated user
     $token = $request->header('Authorization');
-        $user = User::where('api_token', $token)->first();
+    $user = User::where('api_token', $token)->first();
 
     // Retrieve all favorite pharmaceuticals for the user
     $favorites = $user->favorites;
 
-    return response()->json(['favorites' => $favorites]);
-}
+    $favoritesWithIsFavorite = $favorites->map(function ($favorite) {
+        $favoriteArray = $favorite->toArray();
+        $favoriteArray['is_favorite'] = true;
+        return $favoriteArray;
+    });
 
+    return response()->json(['favorites' => $favoritesWithIsFavorite]);
+}
 
 
 
