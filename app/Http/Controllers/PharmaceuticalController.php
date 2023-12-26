@@ -40,7 +40,7 @@ class PharmaceuticalController extends Controller
     {
         $id = $request->input('id');
         $number=$request->input('quantity');
-        $medicine=Pharmaceutical::where('id',$id)->first();
+        $medicine = Pharmaceutical::find($id);
 
 
         //check if the medicine is not exist
@@ -74,6 +74,39 @@ class PharmaceuticalController extends Controller
         return response()->json(['message'=>'the quntity added succesfully','medicine'=>$medicine],200);
     }
     }
+
+
+//     public function quantity(Request $request)
+// {
+//     $id = $request->input('id');
+//     $quantity = $request->input('quantity');
+
+//     // Retrieve the medicine
+//     $medicine = Pharmaceutical::find($id);
+
+//     // Check if the medicine is not found
+//     if (!$medicine) {
+//         return response()->json(['message' => 'The medicine is not found'], 404);
+//     }
+
+//     // If the user wants to remove all the quantity
+//     if ($quantity === "all") {
+//         $medicine->quantity_available = 0;
+//     } else {
+//         // If the user wants to add or remove a specific number of quantity
+//         $medicine->quantity_available += $quantity;
+
+//         // Check if the quantity_available is a negative number
+//         if ($medicine->quantity_available < 0) {
+//             return response()->json(['message' => 'The quantity is not available'], 400);
+//         }
+//     }
+
+//     // Save the changes
+//     $medicine->save();
+
+//     return response()->json(['message' => 'The quantity has been updated successfully', 'medicine' => $medicine], 200);
+// }
 
 
 

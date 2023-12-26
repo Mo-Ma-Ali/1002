@@ -8,6 +8,8 @@ use App\Models\Pharmaceutical;
 use App\Models\User;
 use PHPUnit\TextUI\Configuration\Merger;
 use Symfony\Component\Console\Input\Input;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
@@ -46,9 +48,11 @@ class OrderController extends Controller
     $user = User::where('api_token', $token)->first();
     $user_id=$user->id;
 
+    $totale_price=$request->header('Price');
 
         $order= Order::create([
-            'user_id'=>$user_id
+            'user_id'=>$user_id,
+            'totale_price'=>$totale_price
         ]);
     foreach ($request->input('order') as $pharmaceutical) {
         $order->pharmaceuticals()->attach($pharmaceutical['pharmaceutical_id'], [
@@ -223,49 +227,68 @@ public function getOrder(Request $request)
         $orders = Order::with('pharmaceuticals')->get();
         return response()->json(['orders' => $orders]);
     }
+
+
+
+
+
+
+
+    public function salesReport(Request $request)
+{
+    // Validate the request data
+    $request->validate([
+        'month' => 'required|integer|between:1,12',
+        'year' => 'required|integer',
+    ]);
+
+    // Get the selected month and year from the request
+    $selectedMonth = $request->input('month');
+    $selectedYear = $request->input('year');
+
+    // Calculate the start and end date of the selected month and year
+    $startDate = Carbon::createFromDate($selectedYear, $selectedMonth, 1)->startOfMonth();
+    $endDate = Carbon::createFromDate($selectedYear, $selectedMonth, 1)->endOfMonth();
+
+    // Retrieve orders and calculate total sales for the selected month and year
+    $orders = Order::whereBetween('created_at', [$startDate, $endDate])
+        ->where('status', '=', 'send')
+        ->get();
+
+    $totalSales = $orders->sum('totale_price');
+
+    return response()->json([
+        'total_sales' => $totalSales,
+        'orders' => $orders,
+    ]);
 }
-/*{"order":{
-  "order": {
-    "Date": "2023-12-15T14:03:48.000000Z",
-    "status": "send",
-    "payment": "paid",
-    "order_id": 1
-  },
-  "pharmaceuticals": [
-    {
-      "id": 1,
-      "scientific_name": "rrer",
-      "commercial_name": "lew",
-      "calssification": "maajed",
-      "manufacture_company": "majaed",
-      "quantity_available": 1005,
-      "expire_date": "2032-01-11",
-      "price": 1010,
-      "created_at": "2023-12-15T14:03:09.000000Z",
-      "updated_at": "2023-12-15T14:16:05.000000Z",
-      "pivot": {
-        "order_id": 1,
-        "pharmaceutical_id": 1,
-        "quantity": 5
-      }
-    },
-    {
-      "id": 2,
-      "scientific_name": "rrer",
-      "commercial_name": "lssew",
-      "calssification": "maajed",
-      "manufacture_company": "majaed",
-      "quantity_available": 1007,
-      "expire_date": "2032-01-11",
-      "price": 1010,
-      "created_at": "2023-12-15T14:03:16.000000Z",
-      "updated_at": "2023-12-15T14:16:05.000000Z",
-      "pivot": {
-        "order_id": 1,
-        "pharmaceutical_id": 2,
-        "quantity": 3
-      }
-    }
-  ]
+
+public function quantityReport(Request $request)
+{
+    $request->validate([
+        'month' => 'required|integer|between:1,12',
+        'year' => 'required|integer',
+    ]);
+
+    // Get the selected month and year from the request
+    $selectedMonth = $request->input('month');
+    $selectedYear = $request->input('year');
+
+    // Calculate the start and end date of the selected month and year
+    $startDate = Carbon::createFromDate($selectedYear, $selectedMonth, 1)->startOfMonth();
+    $endDate = Carbon::createFromDate($selectedYear, $selectedMonth, 1)->endOfMonth();
+
+    // Retrieve orders and calculate total quantities for the selected month and year
+    $pharmaceuticals = DB::table('order_pharmaceutical')
+        ->join('pharmaceuticals', 'order_pharmaceutical.pharmaceutical_id', '=', 'pharmaceuticals.id')
+        ->join('orders', 'order_pharmaceutical.order_id', '=', 'orders.id')
+        ->whereBetween('orders.created_at', [$startDate, $endDate])
+        ->where('orders.status', '=', 'send')
+        ->select('pharmaceuticals.id', 'pharmaceuticals.commercial_name', DB::raw('SUM(order_pharmaceutical.quantity) as total_ordered_quantity'))
+        ->groupBy('pharmaceuticals.id', 'pharmaceuticals.commercial_name')
+        ->get();
+
+    return response()->json(['data' => $pharmaceuticals]);
 }
-*/
+}
+

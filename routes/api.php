@@ -85,4 +85,10 @@ Route::middleware('checkPharmacy')->get('/get-favorites', [FavoritesController::
 
 //to remove an item from the favorites
 //Route::middleware('checkPharmacy')->delete('/Defavorites/{pharmaceuticalId}', [FavoritesController::class,'removeFavorite']);
+
+//the report of total salis
+Route::middleware('checkWarehouse')->post('/Report',[OrderController::class,'salesReport']);
+
+//the quantity report of eatch item that has been ordered
+Route::middleware('checkWarehouse')->post('/quan-rep',[OrderController::class,'quantityReport']);
 });

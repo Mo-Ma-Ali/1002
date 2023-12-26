@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained();
             $table->string('status')->default("in process");
             $table->string('payment')->default("unpaid");
+            $table->unsignedDecimal('totale_price', 8, 2); // Adjust the precision and scale as needed
             $table->timestamps();
         });
     }
