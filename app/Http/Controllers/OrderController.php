@@ -291,4 +291,71 @@ public function quantityReport(Request $request)
     return response()->json(['data' => $pharmaceuticals]);
 }
 }
+//quantity
+// {
+//     "data": [
+//       {
+//         "id": 1,
+//         "commercial_name": "ssd",
+//         "total_ordered_quantity": "19"
+//       },
+//       {
+//         "id": 2,
+//         "commercial_name": "hdd",
+//         "total_ordered_quantity": "303"
+//       }
+//     ]
+//   }
 
+
+//total sales
+// {
+//     "total_sales": 1110,
+//     "orders": [
+//       {
+//         "id": 1,
+//         "user_id": 1,
+//         "status": "send",
+//         "payment": "unpaid",
+//         "totale_price": "222.00",
+//         "created_at": "2023-12-26T08:13:07.000000Z",
+//         "updated_at": "2023-12-26T08:13:07.000000Z"
+//       },
+//       {
+//         "id": 2,
+//         "user_id": 1,
+//         "status": "send",
+//         "payment": "unpaid",
+//         "totale_price": "222.00",
+//         "created_at": "2023-12-26T08:13:41.000000Z",
+//         "updated_at": "2023-12-26T08:13:41.000000Z"
+//       },
+//       {
+//         "id": 3,
+//         "user_id": 1,
+//         "status": "send",
+//         "payment": "unpaid",
+//         "totale_price": "222.00",
+//         "created_at": "2023-12-26T08:14:32.000000Z",
+//         "updated_at": "2023-12-26T08:14:32.000000Z"
+//       },
+//       {
+//         "id": 7,
+//         "user_id": 1,
+//         "status": "send",
+//         "payment": "unpaid",
+//         "totale_price": "222.00",
+//         "created_at": "2023-12-26T13:31:37.000000Z",
+//         "updated_at": "2023-12-26T13:31:37.000000Z"
+//       },
+//       {
+//         "id": 8,
+//         "user_id": 1,
+//         "status": "send",
+//         "payment": "unpaid",
+//         "totale_price": "222.00",
+//         "created_at": "2023-12-26T13:31:48.000000Z",
+//         "updated_at": "2023-12-26T13:31:48.000000Z"
+//       }
+//     ]
+//   }
