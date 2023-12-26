@@ -13,33 +13,6 @@ use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
-    public function createOrder(Request $request)
-    {
-        // $request->validate([
-        //     'user_id'=>'required|integer',
-        //     'pharmaceutical_id'=>'required|integer'
-        // ]);
-        $order = Order::create($request->all());
-        return response()->json([
-            'message' => 'Order send successfully',
-            'order'=>$order
-        ], 200);
-          // $order = Order::create();
-
-        // Attach pharmaceuticals to the order with quantities
-        // foreach ($request->pharmaceuticals as $pharmaceuticalData) {
-        //     $order->pharmaceuticals()->attach(
-        //         $pharmaceuticalData['pharmaceutical_id'],
-        //         ['quantity' => $pharmaceuticalData['quantity']]
-        //     );
-        // }
-
-       // return response()->json(['message' => 'Order created successfully', 'order' => $order], 201);
-    }
-
-
-
-
 
 
     public function store(Request $request)
@@ -331,71 +304,3 @@ public function quantityReport(Request $request)
     return response()->json(['data' => $pharmaceuticals]);
 }
 }
-//quantity
-// {
-//     "data": [
-//       {
-//         "id": 1,
-//         "commercial_name": "ssd",
-//         "total_ordered_quantity": "19"
-//       },
-//       {
-//         "id": 2,
-//         "commercial_name": "hdd",
-//         "total_ordered_quantity": "303"
-//       }
-//     ]
-//   }
-
-
-//total sales
-// {
-//     "total_sales": 1110,
-//     "orders": [
-//       {
-//         "id": 1,
-//         "user_id": 1,
-//         "status": "send",
-//         "payment": "unpaid",
-//         "totale_price": "222.00",
-//         "created_at": "2023-12-26T08:13:07.000000Z",
-//         "updated_at": "2023-12-26T08:13:07.000000Z"
-//       },
-//       {
-//         "id": 2,
-//         "user_id": 1,
-//         "status": "send",
-//         "payment": "unpaid",
-//         "totale_price": "222.00",
-//         "created_at": "2023-12-26T08:13:41.000000Z",
-//         "updated_at": "2023-12-26T08:13:41.000000Z"
-//       },
-//       {
-//         "id": 3,
-//         "user_id": 1,
-//         "status": "send",
-//         "payment": "unpaid",
-//         "totale_price": "222.00",
-//         "created_at": "2023-12-26T08:14:32.000000Z",
-//         "updated_at": "2023-12-26T08:14:32.000000Z"
-//       },
-//       {
-//         "id": 7,
-//         "user_id": 1,
-//         "status": "send",
-//         "payment": "unpaid",
-//         "totale_price": "222.00",
-//         "created_at": "2023-12-26T13:31:37.000000Z",
-//         "updated_at": "2023-12-26T13:31:37.000000Z"
-//       },
-//       {
-//         "id": 8,
-//         "user_id": 1,
-//         "status": "send",
-//         "payment": "unpaid",
-//         "totale_price": "222.00",
-//         "created_at": "2023-12-26T13:31:48.000000Z",
-//         "updated_at": "2023-12-26T13:31:48.000000Z"
-//       }
-//     ]
-//   }

@@ -26,13 +26,15 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post('signup', [UserController::class, 'store']);
 Route::post('login', [UserController::class, 'login']);
-Route::delete('logout',[UserController::class, 'logout']);
+
 
 //get the info of the user by the token
-Route::middleware('tran')->get('user', [UserController::class, 'getUser']);
+Route::get('user', [UserController::class, 'getUser']);
 
 //to check if the user has a token valuoe
 Route::middleware('checkToken')->group(function () {
+
+Route::delete('logout',[UserController::class, 'logout']);
 
 //Check if the user is a warehouse and then store the pharmaceutical data in the database
 Route::middleware('checkWarehouse')->middleware('tran')->post('store',[PharmaceuticalController::class,'store']);
@@ -48,10 +50,10 @@ Route::post('saerchComp',[PharmaceuticalController::class,'serchCompany']);
 //Route::get('getClass/{calssification}',[PharmaceuticalController::class,'getByCalss']);
 
 //return all the calssifications in the column in the database
-Route::middleware('tran')->get('getAll',[PharmaceuticalController::class,'getAllClass']);
+Route::get('getAll',[PharmaceuticalController::class,'getAllClass']);
 
 //return all the medicine that has the same classification
-Route::middleware('tran')->post('getAllMedicine',[PharmaceuticalController::class,'getTheClass']);
+Route::post('getAllMedicine',[PharmaceuticalController::class,'getTheClass']);
 
 //review all the orders
 Route::middleware('checkWarehouse')->get('/orders', [OrderController::class, 'retrieveOrders']);
