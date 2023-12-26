@@ -263,6 +263,46 @@ public function getOrder(Request $request)
     ]);
 }
 
+
+
+
+public function salesReportPharamcy(Request $request)
+{
+    // Validate the request data
+    $request->validate([
+        'month' => 'required|integer|between:1,12',
+        'year' => 'required|integer',
+    ]);
+    $token = $request->header('Authorization');
+    $user = User::where('api_token', $token)->first();
+
+    // Get the selected month and year from the request
+    $selectedMonth = $request->input('month');
+    $selectedYear = $request->input('year');
+
+    // Calculate the start and end date of the selected month and year
+    $startDate = Carbon::createFromDate($selectedYear, $selectedMonth, 1)->startOfMonth();
+    $endDate = Carbon::createFromDate($selectedYear, $selectedMonth, 1)->endOfMonth();
+
+    // Retrieve orders and calculate total sales for the selected month and year
+    $orders = Order::whereBetween('created_at', [$startDate, $endDate])
+        ->where('user_id',$user->id)
+        ->where('status','send')
+        // ->where('payment','paid')
+        ->get();
+
+    $totalSales = $orders->sum('totale_price');
+
+    return response()->json([
+        'total_paid' => $totalSales,
+        'orders' => $orders,
+    ]);
+}
+
+
+
+
+
 public function quantityReport(Request $request)
 {
     $request->validate([

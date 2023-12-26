@@ -91,4 +91,7 @@ Route::middleware('checkWarehouse')->post('/Report',[OrderController::class,'sal
 
 //the quantity report of eatch item that has been ordered
 Route::middleware('checkWarehouse')->post('/quan-rep',[OrderController::class,'quantityReport']);
+
+//the report for the pharmacy
+Route::middleware('checkPharmacy')->post('/Report-user',[OrderController::class,'salesReportPharamcy']);
 });
