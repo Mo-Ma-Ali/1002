@@ -36,6 +36,35 @@ class PharmaceuticalController extends Controller
     }
 
 
+    //This function to insert many items at once
+    public function storeMany(Request $request)
+{
+    $request->validate([
+        'pharmaceuticals.*.scientific_name' => 'required|string|max:255',
+        'pharmaceuticals.*.commercial_name' => 'required|string|unique:pharmaceuticals|max:255',
+        'pharmaceuticals.*.calssification' => 'required|string|max:255',
+        'pharmaceuticals.*.manufacture_company' => 'required|string|max:255',
+        'pharmaceuticals.*.quantity_available' => 'required|integer',
+        'pharmaceuticals.*.expire_date' => 'required|date_format:Y-m-d',
+        'pharmaceuticals.*.price' => 'required|integer',
+    ]);
+    $pharmaceuticalsData = $request->input('pharmaceuticals');
+
+    $models = [];
+
+    foreach ($pharmaceuticalsData as $pharmData) {
+        $model = Pharmaceutical::create($pharmData);
+        $models[] = $model;
+    }
+
+    return response()->json([
+        'message' => 'Items added successfully',
+        'medicines' => $models,
+        'code' => 201
+    ]);
+}
+
+
     public function quantity(Request $request)
     {
         $id = $request->input('id');

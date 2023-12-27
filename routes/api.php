@@ -39,6 +39,8 @@ Route::delete('logout',[UserController::class, 'logout']);
 //Check if the user is a warehouse and then store the pharmaceutical data in the database
 Route::middleware('checkWarehouse')->middleware('tran')->post('store',[PharmaceuticalController::class,'store']);
 
+//To insert many items
+Route::middleware('checkWarehouse')->middleware('tran')->post('store-all',[PharmaceuticalController::class,'storeMany']);
 
 Route::middleware('checkWarehouse')->post('edit',[PharmaceuticalController::class,'quantity']);
 
