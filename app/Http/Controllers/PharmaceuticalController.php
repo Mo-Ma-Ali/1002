@@ -17,7 +17,7 @@ class PharmaceuticalController extends Controller
             'manufacture_company' => 'required|string|max:255',
             'quantity_available' => 'required|integer',
             'expire_date' => 'required|date_format:Y-m-d',
-            'price' => 'required|integer',
+            'price' => 'required',
         ]);
        // $data=$request->input('calssification');
         //$search=Pharmaceutical::where('calssification',$data)->first();
@@ -46,7 +46,7 @@ class PharmaceuticalController extends Controller
         'pharmaceuticals.*.manufacture_company' => 'required|string|max:255',
         'pharmaceuticals.*.quantity_available' => 'required|integer',
         'pharmaceuticals.*.expire_date' => 'required|date_format:Y-m-d',
-        'pharmaceuticals.*.price' => 'required|integer',
+        'pharmaceuticals.*.price' => 'required',
     ]);
     $pharmaceuticalsData = $request->input('pharmaceuticals');
 
