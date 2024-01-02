@@ -94,7 +94,7 @@ class PharmaceuticalController extends Controller
         //check if the quntity_availble is a negative number
         if($medicine->quantity_available<0)
 
-        return response()->json(['message'=>'the quntity is not alivabel'],400);
+        return response()->json(['message'=>'the quntity is not avilable'],404);
 
 
         //save the editting
